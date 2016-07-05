@@ -10,6 +10,8 @@
 # Import our VMware automation module
 Import-Module -Name VMware.VimAutomation.Core
 # Set up variables
+## This variable decides if script is in Mock mode (read-only) or not
+$mock = $true
 ## NOTE: I put my credentials in a seperate file here so I can read them in, possibly not the best solution, but means I can make the script public
 . '.\vmware_creds.ps1'
 # Pester expected outcomes
@@ -40,7 +42,7 @@ Describe -Name 'Cluster Configuration: HA Settings' -Fixture {
       catch 
       {
         Write-Warning -Message "Fixing $cluster - $_"
-        Set-Cluster -Cluster $cluster -HAEnabled:$haenabled -Confirm:$false
+        Set-Cluster -Cluster $cluster -HAEnabled:$haenabled -Confirm:$false -WhatIf:$mock
       }
     }
     It -name "$($cluster.name) Cluster HA Admission Control" -test {
@@ -52,7 +54,7 @@ Describe -Name 'Cluster Configuration: HA Settings' -Fixture {
       catch 
       {
         Write-Warning -Message "Fixing $cluster - $_"
-        Set-Cluster -Cluster $cluster -HAAdmissionControlEnabled:$haacenabled -Confirm:$false
+        Set-Cluster -Cluster $cluster -HAAdmissionControlEnabled:$haacenabled -Confirm:$false  -WhatIf:$mock
       }
     }
     It -name "$($cluster.name) Cluster HA Isolation Response" -test {
@@ -64,7 +66,7 @@ Describe -Name 'Cluster Configuration: HA Settings' -Fixture {
       catch 
       {
         Write-Warning -Message "Fixing $cluster - $_"
-        Set-Cluster -Cluster $cluster -HAIsolationResponse:$haisolation -Confirm:$false
+        Set-Cluster -Cluster $cluster -HAIsolationResponse:$haisolation -Confirm:$false -WhatIf:$mock
       }
     }
   }
@@ -82,7 +84,7 @@ Describe -Name 'Cluster Configuration: DRS Settings' -Fixture {
       catch 
       {
         Write-Warning -Message "Fixing $cluster - $_"
-        Set-Cluster -Cluster $cluster -DrsAutomationLevel:$drsmode -Confirm:$false
+        Set-Cluster -Cluster $cluster -DrsAutomationLevel:$drsmode -Confirm:$false -WhatIf:$mock
       }
     }
     It -name "$($cluster.name) Cluster DRS Enabled" -test {
@@ -94,7 +96,7 @@ Describe -Name 'Cluster Configuration: DRS Settings' -Fixture {
       catch 
       {
         Write-Warning -Message "Fixing $cluster - $_"
-        Set-Cluster -Cluster $cluster -DrsEnabled:$drsenabled -Confirm:$false
+        Set-Cluster -Cluster $cluster -DrsEnabled:$drsenabled -Confirm:$false -WhatIf:$mock
       }
     }
   }
@@ -112,7 +114,7 @@ Describe -Name 'Cluster Configuration: VM Swap File Policy Settings' -Fixture {
       catch 
       {
         Write-Warning -Message "Fixing $cluster - $_"
-        Set-Cluster -Cluster $cluster -VMSwapfilePolicy:$clus_swap -Confirm:$false
+        Set-Cluster -Cluster $cluster -VMSwapfilePolicy:$clus_swap -Confirm:$false -WhatIf:$mock
       }
     }
   }
